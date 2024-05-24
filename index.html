@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNN Secondary Structure</title>
+  
+    <!-- css styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
+    <link rel="stylesheet" href="public/styles.css" />
+  
+    <!-- font style -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet" />
+  
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/2ad7ff6128.js" crossorigin="anonymous"></script>
+  
+    <!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  </head>
+  <body>
+    <div id="info">
+      <div>
+        <h1 id="title">RNA Folding Problem</h1>
+        <h2 id="text">using Dynamic Programming over intervals</h2>
+        <br>
+        <p>
+          You can think of DNA as a sequence of bases, represented by A(Adenine), C(Cytosine), G(Guanine), and T((Thymine)). In DNA, A pairs with T, and C pairs with G, which keeps the two strands connected. However, RNA doesn't have a complementary "second strand" like DNA does, so it often folds back on itself, creating pairs within its own sequence. This folding and pairing give rise to the secondary structure of the RNA molecule.
+        </p>
+      </div>
+    </div>
+    <br>
+    <div id="info" class="wrapper">
+      <div>
+      <h1 id="text">Problem Statement</h1>
+      </div>
+      <div>
+        <p>
+          A single-stranded RNA molecule can be understood as a string of symbols (bases) selected from {A, C, G, U}. Let's represent this string as B = b1b2 ... bn, where each bi belongs to {A, C, G, U}. Initially, we can simplify its secondary structure as follows: A pairs with U, and C pairs with G. Moreover, each base can only form a pair with one other base, creating what's termed as a matching. Additionally, secondary structures usually lack knots. 
+        </p>
+        <p>
+          So specifically, we define a secondary structure on B as a set of pairs S = {(i, j)}, where i, j belong to {1, 2, ..., n}, and it adheres to the following criteria:
+          <ol type="i">
+            <li >Each pair within S maintains a minimum separation of four bases between their starting and ending positions; in other words, if (i, j) ∈ S, then i < j - 4.</li>
+            <li>The constituents of any pair within S are exclusively either {A, U} or {C, G} (in any arrangement).</li>
+            <li>S forms a matching: no base is shared among multiple pairs.</li>
+            <li>(The noncrossing condition.) If (i, j) and (k, l) are two pairs in S, then we cannot have i < k < j < l.</li>
+          </ol>
+          <p>
+            Structurally speaking, condition (i) emerges because the RNA molecule lacks the flexibility to bend sharply, while conditions (ii) and (iii) represent the foundational principles of base-pairing, known as the Watson-Crick rules. Condition (iv) is particularly notable, as its natural validity isn't immediately apparent. However, although occasional exceptions exist in actual molecules (referred to as pseudo-knotting), it generally serves as a reliable approximation of the spatial limitations on real RNA secondary structures.
+          </p>
+          <p><b>
+            We want an efficient algorithm for basic RNA Secondary Structure prediction problem that takes a single-stranded RNA molecule and determines a Secondary Structure S with the maximum possible number of base pairs.
+          </b></p>
+        </p>
+      </div>
+    </div>
+    <br>
+    <div id="info" class="wrapper">
+      <h1 id="text">Approaches used to solve the RNA Folding problem</h1>
+      <div id="grid-container">
+        <div id="grid-child purple">
+          <h3><b>Dynamic Programming using single parameter</b></h3>
+          <p>
+            The challenge arises when attempting to formulate a recurrence that defines OPT(j) based on solutions to smaller subproblems. Progress can be made to a certain extent: within the optimal secondary structure on b1b2 ... bj, one of the following holds true:
+            <ol type="i">
+              <li>j isn't engaged in a pair, or</li>
+              <li>j forms a pair with t for a t < j - 4.</li>
+            </ol>
+          </p>
+          <p>The Following inferences can be drawn from the above points : </p>
+          <p>
+            <ol>
+              <li>In the initial scenario, we simply refer to our solution for OPT(j - 1).</li>
+              <li>In the subsequent scenario, due to the noncrossing constraint, it's evident that no pair can have one end positioned between 1 and t − 1 while the other end falls between t + 1 and j − 1. Consequently, we've effectively identified two distinct subproblems: one concerning the bases b1b2 ... bt−1 and the other concerning the bases bt+1 ... bj−1. While the former is addressed by OPT(t − 1), the latter isn't included in our list of subproblems since it doesn't commence with b1.</li>
+            </ol>
+          </p>
+          <p>
+            This realization prompts us to introduce an additional variable. We require the ability to handle subproblems that don't commence with b1; hence, we must consider subproblems on bibi+1 ... bj for all i ≤ j.
+          </p>
+        </div>
+        <div id="grid-child purple">
+          <h3><b>Dynamic Programming over intervals</b></h3>
+          <p>
+            Let OPT(i, j) denote the maximum number of base pairs in a secondary structure on bibi+1 ... bj. The no-sharp-turns condition lets us initialize OPT(i, j) = 0 whenever i ≥ j − 4.
+          </p>
+          <p>
+            Now, in the optimal sub-structure on bi,bi+1,...,bj, we have the same alternatives as before : 
+          </p>
+          <p>
+            <ol type="i">
+              <li>j isn't engaged in a pair, or</li>
+              <li>j forms a pair with t for a t < j - 4.</li>
+            </ol>
+          </p>
+          <p>The Following inferences can be drawn from the above points : </p>
+          <p>
+            <ol>
+              <li>
+                In the first case, we have OPT(i, j) = OPT(i, j - 1).
+              </li>
+              <li>
+                In the second case, we recur on the two subproblems OPT(i, t - 1) and OPT(t + 1, j - 1), the noncrossing condition has isolated these two subproblems from each other.
+              </li>
+            </ol>
+          </p>
+          <p>
+            <h4><b>Recurrence Relation </b></h4>
+            <img src="public/images/Algo2.png" alt="Algo2" style="width:100%">
+          </p>
+          <p>
+            It is easy to bound the running time: there are O(n^2) subproblems to solve, and evaluating the recurrence takes time O(n) for each. Thus the running time is O(n^3).
+          </p>
+        <br>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div id="info" class="wrapper">
+      <h1 id="text">Dynamic Programming Algorithm</h1>
+      <img src="public/images/Algo1.png" alt="Algo1" style="width:75%">
+    </div>
+    <br>
+    <div id="info" class="wrapper">
+      <h1 id="text">Time Complexity Analysis</h1>
+      <img src="public/images/TimeComplexity.jpeg" alt="Algo1" style="width:75%">
+    </div>
+    <br>
+    <div id="info" class="wrapper">
+      <h1 id="text">Results</h1>
+      <div id="grid-container">
+        <div id="grid-child purple">
+          <h3><b>Actual Secondary Structure</b></h3>
+        </div>
+        <div id="grid-child purple">
+          <h3><b>Secondary Structure obtained from Algorithm</b></h3>
+        </div>
+      </div>
+      <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="row">
+              <div class="column">
+                <img src="public/images/tc2/plot_line.png" alt="Snow" style="width:100%">
+              </div>
+              <div class="column">
+                <img src="public/images/tc2/code_plot_line.png" alt="Forest" style="width:100%">
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="column">
+                <img src="public/images/tc4/plot_line.png" alt="Snow" style="width:100%">
+              </div>
+              <div class="column">
+                <img src="public/images/tc4/code_plot_line.png" alt="Forest" style="width:100%">
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="column">
+                <img src="public/images/tc6/plot_line.png" alt="Snow" style="width:100%">
+              </div>
+              <div class="column">
+                <img src="public/images/tc6/code_plot_line.png" alt="Forest" style="width:100%">
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="column">
+                <img src="public/images/tc10/plot_line.png" alt="Snow" style="width:100%">
+              </div>
+              <div class="column">
+                <img src="public/images/tc10/code_plot_line.png" alt="Forest" style="width:100%">
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="column">
+                <img src="public/images/tc12/plot_line.png" alt="Snow" style="width:100%">
+              </div>
+              <div class="column">
+                <img src="public/images/tc12/code_plot_line.png" alt="Forest" style="width:100%">
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="column">
+                <img src="public/images/tc13/plot_line.png" alt="Snow" style="width:100%">
+              </div>
+              <div class="column">
+                <img src="public/images/tc13/code_plot_line.png" alt="Forest" style="width:100%">
+              </div>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+    <br>
+    
+    <script src="script.js"></script>
+  </body>
+</html>

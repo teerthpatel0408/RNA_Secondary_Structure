@@ -1,0 +1,137 @@
+/* body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+} */
+
+#info {
+  position: relative;
+  text-align: center;
+  height: auto;
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  /* box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);  */
+  background-color: #f0f0f0;
+  opacity: 0.9;
+  border-radius: 5px;
+  border: 2px solid #323232;
+  box-shadow: 4px 4px #323232;
+  font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
+
+#title {
+  font-family: "Imbue", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 75px;
+}
+
+#text {
+  font-family: "Imbue", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 50px;
+}
+
+#text2 {
+  font-family: "Imbue", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 35px;
+}
+#controls {
+  margin-bottom: 20px;
+}
+
+body 
+{
+    background-image: url("./images/image6.svg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+
+
+    /* background: rgb(69, 72, 72);
+    background: linear-gradient(0deg, rgb(23, 43, 89) 6%, rgb(64, 63, 61) 89%); */
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    margin: 1.5rem;
+    padding: 1rem;
+    opacity: 1;
+  }
+
+  #grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+  }
+  
+  #kirck {
+    height: 450px;
+    width: 450px;
+  }
+  
+  #jarvis {
+    height: 500px;
+    width: 500px;
+  }
+p 
+{
+  text-align: left;
+}
+
+h2
+{
+  font-family: "Imbue", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 60px;
+}
+
+.contain{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+.wrapper 
+{
+  background-color: #f0f0f0;
+  margin: auto;
+  padding-top: 5px;
+  width: 80%;
+  opacity: 0.9;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: larger;
+  color: rgb(6, 15, 31);
+  border-radius: 5px;
+  border: 2px solid #323232;
+  box-shadow: 4px 4px #000000;
+}
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.d-block{
+  height: 200px;
+  width: 300px;
+}
